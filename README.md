@@ -4,7 +4,7 @@ identify bird species using machine learning
 
 # setup
 
-download and install the apk.
+download and install the <a href="assets/identiFly.apk" download>identiFly.apk</a>.
 
 # sample
 
