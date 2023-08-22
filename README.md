@@ -2,15 +2,12 @@
 
 identify bird species using machine learning
 
-## Getting Started
+# setup
 
-This project is a starting point for a Flutter application.
+download and install the apk.
 
-A few resources to get you started if this is your first Flutter project:
+# sample
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="assets/img1.jpg">
+<img src="assets/img2.jpg">
+<img src="assets/img3.jpg">
