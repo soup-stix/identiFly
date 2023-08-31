@@ -1,13 +1,10 @@
-import 'dart:convert';
+
 import 'dart:io';
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
-import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'dart:developer' as devlog;
+import 'package:marquee/marquee.dart';
 
 class MyUpload extends StatefulWidget{
   const MyUpload({Key?key}): super(key: key);
@@ -161,9 +158,33 @@ class _MyUploadState extends State<MyUpload> {
               SizedBox(height: MediaQuery.of(context).size.width*0.05,),
               _bird != null ? Text("Nice find 😻", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 20),) : Text(""),
               Spacer(),
-              Text("* for best results crop the image to fit the bird", style: TextStyle(color: Colors.red, fontSize: 10),)
+              Container(
+                  height: 40,
+                  child: Marquee(text: "     * for best results crop the image to fit the bird      ", style: TextStyle(color: Colors.red, fontSize: 15),)),
             ],
           ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.cyan,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search_rounded),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.photo_library_outlined),
+              label: 'My Catalogue',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_rounded),
+              label: 'Profile',
+            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.search),
+            //   label: 'Explore',
+            // ),
+          ],
+          selectedItemColor: Colors.amber,
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.amber,
