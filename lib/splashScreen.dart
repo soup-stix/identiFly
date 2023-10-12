@@ -27,33 +27,6 @@ class _MySplashState extends State<MySplash> {
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage("https://img.freepik.com/free-vector/silhouette-forest-landscape-background_1308-73525.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Container(
-                margin: EdgeInsets.all(40),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Column(
-                  children: [
-                    Spacer(),
-                    Text("Catalogue all you findings,", style: TextStyle(color: Colors.amber, fontSize: 25),),
-                    Text("Share with your friends,", style: TextStyle(color: Colors.amber, fontSize: 25),),
-                    Text("explore more", style: TextStyle(color: Colors.amber, fontSize: 25),),
-                    Spacer(),
-                  ],
-                ),
-              ),
-            ),
-
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
                   image: NetworkImage("https://img.freepik.com/free-photo/jungle-forest-view-tropical-trees-generative-ai_169016-29337.jpg?w=1380&t=st=1693503627~exp=1693504227~hmac=a4acaba587c6e208b168da22496ac229f6ed9583efc5e154dddcbb4817af7829"),
                   fit: BoxFit.cover,
                 ),
@@ -61,7 +34,7 @@ class _MySplashState extends State<MySplash> {
               child: Container(
                 margin: EdgeInsets.all(40),
                 decoration: BoxDecoration(
-                  color: Colors.black54,
+                  color: Colors.black87,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Column(
@@ -81,6 +54,34 @@ class _MySplashState extends State<MySplash> {
                         Spacer(),
                       ],
                     ),
+                    Spacer(),
+                  ],
+                ),
+              ),
+            ),
+
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://img.freepik.com/free-vector/silhouette-forest-landscape-background_1308-73525.jpg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Container(
+                margin: EdgeInsets.all(40),
+                decoration: BoxDecoration(
+                  color: Colors.black87,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Column(
+                  children: [
+                    Spacer(),
+                    Text("Click a pic and predict!!\n", style: TextStyle(color: Colors.amber, fontSize: 25),),
+                    Text("Catalogue all you findings,\n", style: TextStyle(color: Colors.amber, fontSize: 25),),
+                    Text("Share with your friends,\n", style: TextStyle(color: Colors.amber, fontSize: 25),),
+                    Text("explore more", style: TextStyle(color: Colors.amber, fontSize: 25),),
                     Spacer(),
                     ElevatedButton(onPressed:() {
                       Navigator.push(
