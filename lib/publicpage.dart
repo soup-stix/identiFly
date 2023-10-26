@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Birds {
   final String name;
@@ -22,6 +25,7 @@ class _PublicPageState extends State<PublicPage> {
     Birds('Bird3', 'Ambattur')
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +43,16 @@ class _PublicPageState extends State<PublicPage> {
             itemCount: Bird.length,
               itemBuilder: (context, index){
               final bir = Bird[index];
+              final cardColor = index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
               return Card(
                 margin: EdgeInsets.all(9.0),
+                elevation: 10.0,
+                color: cardColor,
                 child: ListTile(
-                  title: Text(bir.name),
+                  title: Text(bir.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
                   subtitle: Text(bir.location),
                 )
               );

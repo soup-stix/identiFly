@@ -1,12 +1,26 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  File? _pickedImage;
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _pickedImage = File(pickedFile.path);
+      });
+    }
+  }
+
   final List<String> name = [
     "Bird1",
     "Bird2",
@@ -31,13 +45,12 @@ class _ProfilePageState extends State<ProfilePage> {
         leading: null,
         actions: <Widget>[
           ElevatedButton.icon(
-            icon: Icon(Icons.logout),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xff2D4263),
-            ),
-            onPressed: () {},
-            label: Text('Logout')
-          ),
+              icon: Icon(Icons.logout),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xff2D4263),
+              ),
+              onPressed: () {},
+              label: Text('Logout')),
         ],
         backgroundColor: const Color(0xff2D4263),
       ),
@@ -49,18 +62,34 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                    width: 80, // Set the width and height for the circle
-                    height: 80,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.green, // Change the color of the circle
+                GestureDetector(
+                // onTap: _pickedImage,
+                child:
+                  Container(
+                  width: 100, // Adjust the size as needed
+                  height: 100, // Adjust the size as needed
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey[300], // Background color of the circular container
+                  ),
+                  child: Center(
+                    child: _pickedImage != null
+                        ? Container(
+                      child: Image.file(
+                        _pickedImage!,
+                        width: 100, // Adjust the size as needed
+                        height: 100, // Adjust the size as needed
+                        fit: BoxFit.cover,
+                      ),
+                    ) // Display the picked image overlaid on a circular container
+                        : IconButton(
+                      icon: Icon(Icons.photo),
+                      onPressed: _pickImage,
+                      iconSize: 50, // Adjust the size as needed
                     ),
-                    child: Center(
-                        child: IconButton(
-                      icon: const Icon(Icons.person_pin_rounded, size: 27),
-                      onPressed: () {},
-                    )))
+                  ),
+                ),
+          ),
               ],
               //
             ),
@@ -78,7 +107,9 @@ class _ProfilePageState extends State<ProfilePage> {
           //     textAlign: TextAlign.center,
           //   ),
           // ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Container(
             color: Color(0xff2D4263),
             width: double.infinity,
@@ -102,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-            Expanded(
+          Expanded(
             child: ListView.builder(
               itemCount: name.length,
               itemBuilder: (BuildContext context, int index) {
