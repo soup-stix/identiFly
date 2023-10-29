@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Birds {
   final String name;
@@ -24,6 +23,33 @@ class _PublicPageState extends State<PublicPage> {
     Birds('Bird2', 'Vadapalani'),
     Birds('Bird3', 'Ambattur')
   ];
+
+  void showDetails(BuildContext context, Birds bir ){
+    showDialog(context: context,
+        builder: (BuildContext context){
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          content:
+            // filter: ImageFilter.blur(sigmaX: 0.1, sigmaY: 0.1),
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(5.0),
+              height: MediaQuery.of(context).size.height * 0.4,
+              color: Color(0x2A292940),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Name: ${bir.name} \n Location: ${bir.location}',
+                    style: TextStyle(fontSize: 22, color: Color(0xffADC4CE)),
+                  )
+                ],
+              )
+            )
+        );
+        });
+  }
 
 
   @override
@@ -54,6 +80,9 @@ class _PublicPageState extends State<PublicPage> {
                     fontWeight: FontWeight.bold,
                   )),
                   subtitle: Text(bir.location),
+                  onTap: () {
+                    showDetails(context, bir);
+                  }
                 )
               );
               }),
