@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'main.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -8,6 +11,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   File? _pickedImage;
 
   Future<void> _pickImage() async {
@@ -37,6 +41,8 @@ class _ProfilePageState extends State<ProfilePage> {
   ];
   @override
   Widget build(BuildContext context) {
+    final favoriteModel = Provider.of<FavoriteModel>(context);
+
     return Scaffold(
       backgroundColor: const Color(0xff191919),
       appBar: AppBar(
@@ -135,13 +141,13 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: name.length,
+              itemCount: favoriteModel.favorites.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
                   child: ListTile(
                     tileColor: Color(0xff2D4263),
                     textColor: Colors.white,
-                    title: Text(name[index]),
+                    title: Text(favoriteModel.favorites[index]),
                   ),
                 );
               },

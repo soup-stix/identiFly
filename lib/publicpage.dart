@@ -1,6 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'main.dart';
 
 class Birds {
   final String name;
@@ -80,10 +83,22 @@ class _PublicPageState extends State<PublicPage> {
                     fontWeight: FontWeight.bold,
                   )),
                   subtitle: Text(bir.location),
-                  onTap: () {
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.favorite, // Your favorite icon here
+                      color: Colors.red, // Change color according to your design
+                    ),
+                    onPressed: () {
+                      Provider.of<FavoriteModel>(context, listen: false).addToFavorites(bir.name);
+                      // Implement adding to favorites or handling the favorite action
+                    },
+                  ),
+
+                    onTap: () {
                     showDetails(context, bir);
                   }
-                )
+                ),
+
               );
               }),
           ),
