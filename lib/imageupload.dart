@@ -666,8 +666,9 @@ class _MyUploadState extends State<MyUpload> {
                 Spacer(),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => PublicPage()),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PublicPage()),
                     );
                   },
                   hoverColor: Colors.black,
@@ -684,7 +685,7 @@ class _MyUploadState extends State<MyUpload> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  ProfilePage()),
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
                     );
                   },
                   hoverColor: Colors.black,

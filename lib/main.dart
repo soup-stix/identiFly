@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:identifly/imageupload.dart';
 
-int ?initScreen;
+int? initScreen;
 
 class FavoriteModel with ChangeNotifier {
   List<String> favorites = [];
@@ -14,8 +14,6 @@ class FavoriteModel with ChangeNotifier {
     notifyListeners(); // Notify listeners when favorites change
   }
 }
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +32,8 @@ Future<void> main() async {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         // home: Wrapper(),
-        initialRoute: 'splash',//initScreen == 0 || initScreen == null ? 'splash' : 'imageupload',
+        initialRoute:
+            'splash', //initScreen == 0 || initScreen == null ? 'splash' : 'imageupload',
         routes: {
           'imageupload': (context) => MyUpload(),
           'splash': (context) => MySplash(),
@@ -43,5 +42,3 @@ Future<void> main() async {
     ),
   );
 }
-
-

@@ -11,7 +11,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   File? _pickedImage;
 
   Future<void> _pickImage() async {
@@ -69,33 +68,33 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                // onTap: _pickedImage,
-                child:
-                  Container(
-                  width: 100, // Adjust the size as needed
-                  height: 100, // Adjust the size as needed
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey[300], // Background color of the circular container
-                  ),
-                  child: Center(
-                    child: _pickedImage != null
-                        ? Container(
-                      child: Image.file(
-                        _pickedImage!,
-                        width: 100, // Adjust the size as needed
-                        height: 100, // Adjust the size as needed
-                        fit: BoxFit.cover,
-                      ),
-                    ) // Display the picked image overlaid on a circular container
-                        : IconButton(
-                      icon: Icon(Icons.photo),
-                      onPressed: _pickImage,
-                      iconSize: 50, // Adjust the size as needed
+                  // onTap: _pickedImage,
+                  child: Container(
+                    width: 100, // Adjust the size as needed
+                    height: 100, // Adjust the size as needed
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey[
+                          300], // Background color of the circular container
+                    ),
+                    child: Center(
+                      child: _pickedImage != null
+                          ? Container(
+                              child: Image.file(
+                                _pickedImage!,
+                                width: 100, // Adjust the size as needed
+                                height: 100, // Adjust the size as needed
+                                fit: BoxFit.cover,
+                              ),
+                            ) // Display the picked image overlaid on a circular container
+                          : IconButton(
+                              icon: Icon(Icons.photo),
+                              onPressed: _pickImage,
+                              iconSize: 50, // Adjust the size as needed
+                            ),
                     ),
                   ),
                 ),
-          ),
               ],
               //
             ),
