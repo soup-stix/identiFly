@@ -18,6 +18,7 @@ class _MyUploadState extends State<MyUpload> {
   File? uploadimage;
   bool isImageLoaded = false;
   dynamic _bird;
+  List birdsList = [];
   String _label = "";
   dynamic _confidence;
 
@@ -579,6 +580,16 @@ class _MyUploadState extends State<MyUpload> {
                               children: [
                                 TextButton(
                                   onPressed: () {
+                                    print({"label": _label, "image": uploadimage, "location": "unknow", "date": DateTime.now()
+                                        .toString()
+                                        .substring(0, 11), "time": DateTime.now()
+                                        .toString()
+                                        .substring(11, 19), "device": "unknown"});
+                                    birdsList.add({"label": _label, "image": uploadimage, "location": "unknow", "date": DateTime.now()
+                                        .toString()
+                                        .substring(0, 11), "time": DateTime.now()
+                                        .toString()
+                                        .substring(11, 19), "device": "unknown"});
                                     Navigator.of(ctx).pop();
                                   },
                                   child: Container(
@@ -653,7 +664,9 @@ class _MyUploadState extends State<MyUpload> {
                 ),
                 Spacer(),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'listing');
+                  },
                   hoverColor: Colors.black,
                   color: Colors.white,
                   highlightColor: Colors.black12,
@@ -666,9 +679,10 @@ class _MyUploadState extends State<MyUpload> {
                 Spacer(),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => PublicPage()),
-                    );
+                    Navigator.pushNamed(context, 'public');
+                        // MaterialPageRoute(builder: (context) => PublicPage()),
+                    // );
+
                   },
                   hoverColor: Colors.black,
                   color: Colors.white,
