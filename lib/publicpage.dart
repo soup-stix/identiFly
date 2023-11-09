@@ -84,9 +84,7 @@ class _PublicPageState extends State<PublicPage> {
                         subtitle: Text(bir.location),
                         trailing: IconButton(
                           icon: Icon(
-                            Icons.favorite, // Your favorite icon here
-                            color: Colors
-                                .red, // Change color according to your design
+                            Icons.favorite, // Your favorite icon here// Change color according to your design
                           ),
                           onPressed: () {
                             Provider.of<FavoriteModel>(context, listen: false)

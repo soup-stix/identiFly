@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
 import 'package:flutter/material.dart';
+import 'package:identifly/myListing.dart';
 import 'package:identifly/profilepage.dart';
 import 'package:identifly/publicpage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -604,6 +605,7 @@ class _MyUploadState extends State<MyUpload> {
                                           .substring(11, 19),
                                       "device": "unknown"
                                     });
+                                    print(birdsList);
                                     Navigator.of(ctx).pop();
                                   },
                                   child: Container(
@@ -679,7 +681,12 @@ class _MyUploadState extends State<MyUpload> {
                 Spacer(),
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'listing');
+                    // Navigator.pushNamed(context, 'listing', arguments: ["birds"]);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                        builder: (context) => ListingPage(itemList: birdsList),
+                    ),);
                   },
                   hoverColor: Colors.black,
                   color: Colors.white,

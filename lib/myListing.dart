@@ -26,6 +26,13 @@ class _ListingPageState extends State<ListingPage> {
     Birds('Bird3', 'Ambattur')
   ];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    print(widget.itemList);
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,21 +48,22 @@ class _ListingPageState extends State<ListingPage> {
         children: [
           Expanded(
             child: ListView.builder(
-                itemCount: Bird.length,
+                itemCount: widget.itemList.length,
                 itemBuilder: (context, index){
-                  final bir = Bird[index];
+                  final bir = widget.itemList[index];
+                  print(bir);
                   final cardColor = index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
                   return Card(
                       margin: EdgeInsets.all(9.0),
                       elevation: 10.0,
                       color: cardColor,
                       child: ListTile(
-                        // leading: ,//Image.file(),
-                        title: Text(bir.name,
+                        leading: Image.file(bir["image"]),
+                        title: Text(bir["label"],
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             )),
-                        subtitle: Text(bir.location),
+                        subtitle: Text(bir["location"]),
                       )
                   );
                 }),

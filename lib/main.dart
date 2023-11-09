@@ -41,9 +41,7 @@ Future<void> main() async {
             'imageupload': (context) => MyUpload(),
             'splash': (context) => MySplash(),
             'public': (context) => PublicPage(),
-            'listing': (context) => ListingPage(
-                  itemList: [],
-                ),
+            // 'listing': (context) => ListingPage(),
           }),
     ),
   );
