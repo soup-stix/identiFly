@@ -13,8 +13,15 @@ class FavoriteModel with ChangeNotifier {
   List<String> favorites = [];
 
   void addToFavorites(String item) {
-    favorites.add(item);
-    notifyListeners(); // Notify listeners when favorites change
+    if(!favorites.contains(item))
+    {
+      favorites.add(item);
+      notifyListeners(); // Notify listeners when favorites change
+    }
+  }
+
+  bool isFavorite(String item){
+    return favorites.contains(item);
   }
 }
 
