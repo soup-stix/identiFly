@@ -580,16 +580,30 @@ class _MyUploadState extends State<MyUpload> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    print({"label": _label, "image": uploadimage, "location": "unknow", "date": DateTime.now()
-                                        .toString()
-                                        .substring(0, 11), "time": DateTime.now()
-                                        .toString()
-                                        .substring(11, 19), "device": "unknown"});
-                                    birdsList.add({"label": _label, "image": uploadimage, "location": "unknow", "date": DateTime.now()
-                                        .toString()
-                                        .substring(0, 11), "time": DateTime.now()
-                                        .toString()
-                                        .substring(11, 19), "device": "unknown"});
+                                    print({
+                                      "label": _label,
+                                      "image": uploadimage,
+                                      "location": "unknow",
+                                      "date": DateTime.now()
+                                          .toString()
+                                          .substring(0, 11),
+                                      "time": DateTime.now()
+                                          .toString()
+                                          .substring(11, 19),
+                                      "device": "unknown"
+                                    });
+                                    birdsList.add({
+                                      "label": _label,
+                                      "image": uploadimage,
+                                      "location": "unknow",
+                                      "date": DateTime.now()
+                                          .toString()
+                                          .substring(0, 11),
+                                      "time": DateTime.now()
+                                          .toString()
+                                          .substring(11, 19),
+                                      "device": "unknown"
+                                    });
                                     Navigator.of(ctx).pop();
                                   },
                                   child: Container(
@@ -680,9 +694,8 @@ class _MyUploadState extends State<MyUpload> {
                 IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, 'public');
-                        // MaterialPageRoute(builder: (context) => PublicPage()),
+                    // MaterialPageRoute(builder: (context) => PublicPage()),
                     // );
-
                   },
                   hoverColor: Colors.black,
                   color: Colors.white,
@@ -698,7 +711,7 @@ class _MyUploadState extends State<MyUpload> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  ProfilePage()),
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
                     );
                   },
                   hoverColor: Colors.black,

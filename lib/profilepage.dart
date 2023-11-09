@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'main.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -37,6 +39,8 @@ class _ProfilePageState extends State<ProfilePage> {
   ];
   @override
   Widget build(BuildContext context) {
+    final favoriteModel = Provider.of<FavoriteModel>(context);
+
     return Scaffold(
       backgroundColor: const Color(0xff191919),
       appBar: AppBar(
@@ -63,33 +67,33 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                // onTap: _pickedImage,
-                child:
-                  Container(
-                  width: 100, // Adjust the size as needed
-                  height: 100, // Adjust the size as needed
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey[300], // Background color of the circular container
-                  ),
-                  child: Center(
-                    child: _pickedImage != null
-                        ? Container(
-                      child: Image.file(
-                        _pickedImage!,
-                        width: 100, // Adjust the size as needed
-                        height: 100, // Adjust the size as needed
-                        fit: BoxFit.cover,
-                      ),
-                    ) // Display the picked image overlaid on a circular container
-                        : IconButton(
-                      icon: Icon(Icons.photo),
-                      onPressed: _pickImage,
-                      iconSize: 50, // Adjust the size as needed
+                  // onTap: _pickedImage,
+                  child: Container(
+                    width: 100, // Adjust the size as needed
+                    height: 100, // Adjust the size as needed
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey[
+                          300], // Background color of the circular container
+                    ),
+                    child: Center(
+                      child: _pickedImage != null
+                          ? Container(
+                              child: Image.file(
+                                _pickedImage!,
+                                width: 100, // Adjust the size as needed
+                                height: 100, // Adjust the size as needed
+                                fit: BoxFit.cover,
+                              ),
+                            ) // Display the picked image overlaid on a circular container
+                          : IconButton(
+                              icon: Icon(Icons.photo),
+                              onPressed: _pickImage,
+                              iconSize: 50, // Adjust the size as needed
+                            ),
                     ),
                   ),
                 ),
-          ),
               ],
               //
             ),
@@ -135,13 +139,13 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: name.length,
+              itemCount: favoriteModel.favorites.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
                   child: ListTile(
                     tileColor: Color(0xff2D4263),
                     textColor: Colors.white,
-                    title: Text(name[index]),
+                    title: Text(favoriteModel.favorites[index]),
                   ),
                 );
               },
