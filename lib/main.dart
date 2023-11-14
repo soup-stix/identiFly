@@ -20,6 +20,8 @@ class FavoriteModel with ChangeNotifier {
     }
   }
 
+
+
   bool isFavorite(String item){
     return favorites.contains(item);
   }
