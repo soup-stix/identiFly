@@ -8,6 +8,7 @@ import 'package:identifly/myListing.dart';
 import 'package:identifly/profilepage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:marquee/marquee.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class MyUpload extends StatefulWidget {
   const MyUpload({Key? key}) : super(key: key);
@@ -24,6 +25,9 @@ class _MyUploadState extends State<MyUpload> {
   String _label = "";
   dynamic _confidence;
 
+  // Create a reference to the Firestore collection where you want to store the data.
+  final CollectionReference birdsCollection = FirebaseFirestore.instance.collection('myBirds');
+
   String _locationMessage = "";
 
   final ImagePicker _picker = ImagePicker();
@@ -35,21 +39,55 @@ class _MyUploadState extends State<MyUpload> {
     _getLocation();
   }
 
-  void _addBirdToFirestore() async {
+  // void _addBirdToFirestore() async {
+  //   // Create a new document in the collection.
+  //   final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
+  //   // Await the Future<DocumentSnapshot<Object?>> object.
+  //   final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+  //   // Check if the document exists.
+  //   if (documentSnapshot.exists) {
+  //
+  //     // Get the user's birds array.
+  //     final List<dynamic> birdsArray = documentSnapshot['birds'];
+  //
+  //     // Add the new bird to the array.
+  //     birdsArray.add({
+  //       'label': _label,
+  //       'image': "uploadimage",
+  //       'location': 'unknown',
+  //       'date': DateTime.now().toString().substring(0, 11),
+  //       'time': DateTime.now().toString().substring(11, 19),
+  //       'device': 'Oneplus 8',
+  //     });
+  //
+  //     // Set the updated birds array on the document.
+  //     myBirdsDocument.update({'birds': birdsArray});
+  //   } else {
+  //     // The document does not exist, so create it.
+  //     myBirdsDocument.set({
+  //       'username': 'anandarul47@gmail.com',
+  //       'birds': [],
+  //     });
+  //   }
+  // }
+
+  Future<void> _addBirdToFirestore() async {
     // Create a new document in the collection.
     final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
     // Await the Future<DocumentSnapshot<Object?>> object.
     final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
     // Check if the document exists.
     if (documentSnapshot.exists) {
-
       // Get the user's birds array.
       final List<dynamic> birdsArray = documentSnapshot['birds'];
+
+      // Upload the image to Firebase Storage and get the download URL.
+      String imageDownloadURL = await _uploadImageToStorage();
 
       // Add the new bird to the array.
       birdsArray.add({
         'label': _label,
-        'image': uploadimage,
+        'image': imageDownloadURL,
         'location': 'unknown',
         'date': DateTime.now().toString().substring(0, 11),
         'time': DateTime.now().toString().substring(11, 19),
@@ -64,6 +102,32 @@ class _MyUploadState extends State<MyUpload> {
         'username': 'anandarul47@gmail.com',
         'birds': [],
       });
+    }
+  }
+
+  Future<String> _uploadImageToStorage() async {
+    try {
+      if (uploadimage != null) {
+        File imageFile = uploadimage!;
+
+        // Create a reference to the Firebase Cloud Storage bucket
+        Reference storageReference = FirebaseStorage.instance.ref().child('images/${DateTime.now().toString()}');
+
+        // Upload the file to Firebase Cloud Storage
+        await storageReference.putFile(imageFile);
+
+        // Get the download URL
+        String downloadURL = await storageReference.getDownloadURL();
+
+        return downloadURL;
+      } else {
+        return '';
+        // Handle the case where uploadimage is null
+        print('Upload image is null.');
+      }
+    } catch (e) {
+      print('Error uploading image to Firestore: $e');
+      return ''; // Handle error as needed
     }
   }
 
@@ -661,7 +725,7 @@ class _MyUploadState extends State<MyUpload> {
                                     });
                                     print(birdsList);
                                     // Add the data to Firestore.
-                                    // _addBirdToFirestore();
+                                    _addBirdToFirestore();
 
                                     // Pop the current screen.
                                     Navigator.of(ctx).pop();

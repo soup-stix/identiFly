@@ -1,16 +1,11 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'main.dart';
 
-class Birds {
-  final String name;
-  final String location;
-
-  Birds(this.name, this.location);
-}
 
 class PublicPage extends StatefulWidget {
   const PublicPage({Key? key}) : super(key: key);
@@ -20,15 +15,63 @@ class PublicPage extends StatefulWidget {
 }
 
 class _PublicPageState extends State<PublicPage> {
-  final List<Birds> Bird = [
-    Birds('Bird1', 'Sholinganalur'),
-    Birds('Bird2', 'Vadapalani'),
-    Birds('Bird3', 'Ambattur')
-  ];
+  List<dynamic> Bird = [];
 
   Set<String> favoriteBirds = Set<String>();
 
-  void showDetails(BuildContext context, Birds bir) {
+  // Create a reference to the Firestore collection where you want to store the data.
+  final CollectionReference birdsCollection = FirebaseFirestore.instance.collection('myBirds');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _readFromFirestore();
+  }
+
+  void _readFromFirestore() async {
+    // Create a new document in the collection.
+    final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
+    // Await the Future<DocumentSnapshot<Object?>> object.
+    final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+    // Check if the document exists.
+    if (documentSnapshot.exists) {
+
+      // Get the user's birds array.
+      final List<dynamic> birdsArray = documentSnapshot['birds'];
+
+      setState(() {
+        Bird = documentSnapshot['birds'];
+      });
+
+    }
+  }
+
+  Future<void> _addBirdToFirestore(dynamic bird) async {
+    // Create a new document in the collection.
+    final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
+    // Await the Future<DocumentSnapshot<Object?>> object.
+    final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+    // Check if the document exists.
+    if (documentSnapshot.exists) {
+      // Get the user's birds array.
+      final List<dynamic> birdsArray = documentSnapshot['favs'];
+
+      // Add the new bird to the array.
+      birdsArray.add(bird);
+
+      // Set the updated birds array on the document.
+      myBirdsDocument.update({'favs': birdsArray});
+    } else {
+      // The document does not exist, so create it.
+      myBirdsDocument.set({
+        'username': 'anandarul47@gmail.com',
+        'favs': [],
+      });
+    }
+  }
+
+  void showDetails(BuildContext context, dynamic bir) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -46,7 +89,7 @@ class _PublicPageState extends State<PublicPage> {
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Name: ${bir.name} \n Location: ${bir.location}',
+                        'Name: ${bir["label"]} \n Location: ${bir["location"]}',
                         style: TextStyle(
                             fontSize: 22, color: Color(0xffADC4CE)),
                       )
@@ -79,20 +122,21 @@ class _PublicPageState extends State<PublicPage> {
                     elevation: 10.0,
                     color: cardColor,
                     child: ListTile(
-                        title: Text(bir.name,
+                        leading: Image.network(bir["image"]),
+                        title: Text(bir['label'],
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             )),
-                        subtitle: Text(bir.location),
+                        subtitle: Text(bir["location"]),
                         trailing: IconButton(
                           icon: Icon(
                             Icons.favorite,
-                            color: Provider.of<FavoriteModel>(context).isFavorite(bir.name) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
+                            color: Provider.of<FavoriteModel>(context).isFavorite(bir["image"]) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
                           ),
                           onPressed: () {
-                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir.name) ? {
+                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir["image"]) ? {
                               Provider.of<FavoriteModel>(context, listen: false)
-                                  .removeFromFavorites(bir.name),
+                                  .removeFromFavorites(bir["image"]),
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -111,10 +155,11 @@ class _PublicPageState extends State<PublicPage> {
 
                                 : {Provider.of<FavoriteModel>(
                                 context, listen: false)
-                                .addToFavorites(bir.name),
-                              if (!favoriteBirds.contains(bir.name)) {
+                                .addToFavorites(bir["image"]),
+                              _addBirdToFirestore(bir),
+                              if (!favoriteBirds.contains(bir["image"])) {
                                 Provider.of<FavoriteModel>(context, listen: false)
-                                    .addToFavorites(bir.name)
+                                    .addToFavorites(bir["image"] )
                               },
                               showDialog(
                                   context: context,

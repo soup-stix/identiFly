@@ -47,6 +47,7 @@ dependencies:
   marquee: ^2.2.3
   geolocator: ^10.1.0
   firebase_core: ^2.22.0
+  firebase_storage: ^11.5.1
   cloud_firestore: ^4.13.1
 
 dev_dependencies:

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -23,20 +24,30 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  final List<String> name = [
-    "Bird1",
-    "Bird2",
-    "Bird3",
-    "Bird4",
-    "Bird5",
-    "Bird6",
-    "Bird7",
-    "Bird8",
-    "Bird9",
-    "Bird10",
-    "Bird11",
-    "Bird12"
-  ];
+  List<dynamic> Bird = [];
+
+  // Create a reference to the Firestore collection where you want to store the data.
+  final CollectionReference birdsCollection = FirebaseFirestore.instance.collection('myBirds');
+
+  void _readFromFirestore() async {
+    // Create a new document in the collection.
+    final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
+    // Await the Future<DocumentSnapshot<Object?>> object.
+    final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+    // Check if the document exists.
+    if (documentSnapshot.exists) {
+
+      // Get the user's birds array.
+      final List<dynamic> birdsArray = documentSnapshot['birds'];
+
+      setState(() {
+        Bird = documentSnapshot['birds'];
+      });
+
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final favoriteModel = Provider.of<FavoriteModel>(context);
@@ -205,13 +216,16 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: favoriteModel.favorites.length,
-              itemBuilder: (BuildContext context, int index) {
+              itemCount: Bird.length,
+              itemBuilder: (context, index) {
+                final bir = Bird[index];
+                final cardColor =
+                index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
                 return Card(
                   child: ListTile(
                     tileColor: Color(0xff2D4263),
                     textColor: Colors.white,
-                    title: Text(favoriteModel.favorites[index]),
+                    title: Text(bir["label"]),
                   ),
                 );
               },
