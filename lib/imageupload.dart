@@ -357,10 +357,10 @@ class _MyUploadState extends State<MyUpload> {
                                           color: const Color(0xffADC4CE),
                                           fontSize: 25)),
                                   TextSpan(
-                                      text: '   unknown',
+                                      text: _locationMessage,
                                       style: TextStyle(
                                           color: const Color(0xff3A98B9),
-                                          fontSize: 25)),
+                                          fontSize: 20)),
                                 ],
                               ),
                             ),
