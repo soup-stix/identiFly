@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:identifly/myListing.dart';
 import 'package:identifly/profilepage.dart';
-import 'package:identifly/publicpage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:marquee/marquee.dart';
 
@@ -33,6 +33,38 @@ class _MyUploadState extends State<MyUpload> {
     super.initState();
     loadMyModel();
     _getLocation();
+  }
+
+  void _addBirdToFirestore() async {
+    // Create a new document in the collection.
+    final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
+    // Await the Future<DocumentSnapshot<Object?>> object.
+    final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+    // Check if the document exists.
+    if (documentSnapshot.exists) {
+
+      // Get the user's birds array.
+      final List<dynamic> birdsArray = documentSnapshot['birds'];
+
+      // Add the new bird to the array.
+      birdsArray.add({
+        'label': _label,
+        'image': uploadimage,
+        'location': 'unknown',
+        'date': DateTime.now().toString().substring(0, 11),
+        'time': DateTime.now().toString().substring(11, 19),
+        'device': 'Oneplus 8',
+      });
+
+      // Set the updated birds array on the document.
+      myBirdsDocument.update({'birds': birdsArray});
+    } else {
+      // The document does not exist, so create it.
+      myBirdsDocument.set({
+        'username': 'anandarul47@gmail.com',
+        'birds': [],
+      });
+    }
   }
 
   Future<void> _getLocation() async {
@@ -628,6 +660,10 @@ class _MyUploadState extends State<MyUpload> {
                                       "device": "unknown"
                                     });
                                     print(birdsList);
+                                    // Add the data to Firestore.
+                                    // _addBirdToFirestore();
+
+                                    // Pop the current screen.
                                     Navigator.of(ctx).pop();
                                   },
                                   child: Container(
