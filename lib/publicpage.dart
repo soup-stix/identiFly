@@ -26,7 +26,7 @@ class _PublicPageState extends State<PublicPage> {
     Birds('Bird3', 'Ambattur')
   ];
 
-
+  Set<String> favoriteBirds = Set<String>();
 
   void showDetails(BuildContext context, Birds bir) {
     showDialog(
@@ -90,6 +90,7 @@ class _PublicPageState extends State<PublicPage> {
                             color: Provider.of<FavoriteModel>(context).isFavorite(bir.name) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
                           ),
                           onPressed: () {
+<<<<<<< HEAD
                             Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir.name) ? {
                             Provider.of<FavoriteModel>(context, listen: false)
                                 .removeFromFavorites(bir.name),
@@ -112,6 +113,12 @@ class _PublicPageState extends State<PublicPage> {
                                 : {Provider.of<FavoriteModel>(
                                 context, listen: false)
                                 .addToFavorites(bir.name),
+=======
+                            if (!favoriteBirds.contains(bir.name)) {
+                              Provider.of<FavoriteModel>(context, listen: false)
+                                  .addToFavorites(bir.name);
+                            }
+>>>>>>> 94c5b088f6c6b038ca135b8e7feac8843a3712d6
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
