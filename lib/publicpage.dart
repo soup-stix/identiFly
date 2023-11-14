@@ -90,19 +90,48 @@ class _PublicPageState extends State<PublicPage> {
                             color: Provider.of<FavoriteModel>(context).isFavorite(bir.name) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
                           ),
                           onPressed: () {
+                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir.name) ? {
                             Provider.of<FavoriteModel>(context, listen: false)
-                                .addToFavorites(bir.name);
+                                .removeFromFavorites(bir.name),
+                            showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                            return const AlertDialog(
+                            backgroundColor: Colors.black38,
+                            title: Center(
+                            child: const Text(
+                            'Removed from Favorites',
+                            style:
+                            TextStyle(color: Color(0xffADC4CE)),
+                            ),
+                            ),
+                            );
+                            })
+                            }
+
+                                : {Provider.of<FavoriteModel>(
+                                context, listen: false)
+                                .addToFavorites(bir.name),
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
-                                      backgroundColor: Colors.black38,
-                                      title: Text(
+                                  return const AlertDialog(
+                                    backgroundColor: Colors.black38,
+                                    title: Center(
+                                      child: const Text(
                                         'Added to Favorites',
                                         style:
-                                            TextStyle(color: Color(0xffADC4CE)),
-                                      ));
-                                });
+                                        TextStyle(color: Color(0xffADC4CE)),
+                                      ),
+                                    ),
+                                  );
+                                })
+                            };
+                            setState(() {
+
+                            });
+                            // Provider.of<FavoriteModel>(context, listen: false)
+                            //     .addToFavorites(bir.name);
                             // Implement adding to favorites or handling the favorite action
                           },
                         ),

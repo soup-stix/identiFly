@@ -45,6 +45,8 @@ dependencies:
   shared_preferences: ^2.2.0
   carousel_slider: ^4.2.1
   marquee: ^2.2.3
+  firebase_core: ^2.22.0
+  cloud_firestore: ^4.13.0
 
 dev_dependencies:
   flutter_test:
