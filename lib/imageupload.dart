@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:identifly/myListing.dart';
 import 'package:identifly/profilepage.dart';
 import 'package:identifly/publicpage.dart';
@@ -23,12 +24,33 @@ class _MyUploadState extends State<MyUpload> {
   String _label = "";
   dynamic _confidence;
 
+  String _locationMessage = "";
+
   final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
     loadMyModel();
+    _getLocation();
+  }
+
+  Future<void> _getLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        _locationMessage =
+        "${position.latitude}, ${position.longitude}";
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        _locationMessage = "Error getting location";
+      });
+    }
   }
 
   loadMyModel() async {
@@ -211,10 +233,10 @@ class _MyUploadState extends State<MyUpload> {
                                           color: const Color(0xffADC4CE),
                                           fontSize: 25)),
                                   TextSpan(
-                                      text: '   unknown',
+                                      text: _locationMessage,
                                       style: TextStyle(
                                           color: const Color(0xff75C2F6),
-                                          fontSize: 25)),
+                                          fontSize: 15)),
                                 ],
                               ),
                             ),
