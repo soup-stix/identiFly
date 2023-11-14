@@ -29,6 +29,13 @@ class _ProfilePageState extends State<ProfilePage> {
   // Create a reference to the Firestore collection where you want to store the data.
   final CollectionReference birdsCollection = FirebaseFirestore.instance.collection('myBirds');
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _readFromFirestore();
+  }
+
   void _readFromFirestore() async {
     // Create a new document in the collection.
     final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
@@ -38,10 +45,10 @@ class _ProfilePageState extends State<ProfilePage> {
     if (documentSnapshot.exists) {
 
       // Get the user's birds array.
-      final List<dynamic> birdsArray = documentSnapshot['birds'];
+      final List<dynamic> birdsArray = documentSnapshot['favs'];
 
       setState(() {
-        Bird = documentSnapshot['birds'];
+        Bird = documentSnapshot['favs'];
       });
 
     }
@@ -69,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
         backgroundColor: const Color(0xff2D4263),
       ),
-      body: Column(
+    body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Container( // These are supposed to be the info of the user that soup-stix rejected
@@ -164,16 +171,16 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              'My Favourites:',
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(10.0),
+          //   child: Text(
+          //     'My Favourites:',
+          //     style: TextStyle(
+          //       fontSize: 24,
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // ),
           // Expan/ded(
           //   child: ListView.builder(
           //     itemCoun/t: favoriteModel.favorites.length,
@@ -188,44 +195,35 @@ class _ProfilePageState extends State<ProfilePage> {
           //     },
           // ),
           // ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            color: Color(0xff2D4263),
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-            child: Text(
-              'welcome@gmail.com',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              'Favorite Birds:',
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
-              itemCount: Bird.length,
-              itemBuilder: (context, index) {
-                final bir = Bird[index];
-                final cardColor =
-                index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
+              itemCount: 1, // Just one item for the ExpansionTile
+              itemBuilder: (BuildContext context, int index) {
                 return Card(
-                  child: ListTile(
-                    tileColor: Color(0xff2D4263),
-                    textColor: Colors.white,
-                    title: Text(bir["label"]),
+                  color: Colors.black,
+                  child: ExpansionTile(
+                    tilePadding: EdgeInsets.all(10.0),
+                    backgroundColor: Color(0xff2D4263),
+                    title: Text(
+                      'Favorites',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                    children: [
+                      // List your favorites here
+                      for (dynamic favorite in Bird)
+                        ListTile(
+                          leading: Image.network(favorite["image"]),
+                          title: Text(favorite["label"],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )),
+                          subtitle: Text(favorite["location"]),
+                        ),
+                    ],
                   ),
                 );
               },

@@ -131,12 +131,12 @@ class _PublicPageState extends State<PublicPage> {
                         trailing: IconButton(
                           icon: Icon(
                             Icons.favorite,
-                            color: Provider.of<FavoriteModel>(context).isFavorite(bir["image"]) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
+                            color: Provider.of<FavoriteModel>(context).isFavorite(bir) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
                           ),
                           onPressed: () {
-                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir["image"]) ? {
+                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir) ? {
                               Provider.of<FavoriteModel>(context, listen: false)
-                                  .removeFromFavorites(bir["image"]),
+                                  .removeFromFavorites(bir),
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -155,11 +155,11 @@ class _PublicPageState extends State<PublicPage> {
 
                                 : {Provider.of<FavoriteModel>(
                                 context, listen: false)
-                                .addToFavorites(bir["image"]),
+                                .addToFavorites(bir),
                               _addBirdToFirestore(bir),
-                              if (!favoriteBirds.contains(bir["image"])) {
+                              if (!favoriteBirds.contains(bir)) {
                                 Provider.of<FavoriteModel>(context, listen: false)
-                                    .addToFavorites(bir["image"] )
+                                    .addToFavorites(bir)
                               },
                               showDialog(
                                   context: context,
