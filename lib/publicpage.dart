@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'main.dart';
@@ -73,29 +74,201 @@ class _PublicPageState extends State<PublicPage> {
 
   void showDetails(BuildContext context, dynamic bir) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              backgroundColor: Colors.black,
-              content:
-              // filter: ImageFilter.blur(sigmaX: 0.1, sigmaY: 0.1),
-              Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(5.0),
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  color: Color(0x2A292940),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Name: ${bir["label"]} \n Location: ${bir["location"]}',
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.black,
+        // title: const Text("Alert Dialog Box", style: TextStyle(color: const Color(0xff75C2F6)),),
+        title: Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(right: 30),
+          color: Colors.black,
+        ),
+        actions: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(children: <TextSpan>[
+                  TextSpan(
+                      text: 'Posted by: Anand',
+                      style: TextStyle(
+                          color: const Color(0xffADC4CE),
+                          fontSize: 20)),
+                ]),
+              ),
+              RichText(
+                text: TextSpan(children: <TextSpan>[
+                  TextSpan(
+                      text: 'Details',
+                      style: TextStyle(
+                          color: const Color(0xffADC4CE),
+                          fontSize: 20)),
+                ]),
+              ),
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: "{\n\n",
                         style: TextStyle(
-                            fontSize: 22, color: Color(0xffADC4CE)),
-                      )
-                    ],
-                  )));
-        });
+                            color: const Color(0xffADC4CE),
+                            fontSize: 25)),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(children: <TextSpan>[
+                  TextSpan(
+                      text: '\t"image" :',
+                      style: TextStyle(
+                          color: const Color(0xffADC4CE),
+                          fontSize: 25)),
+                ]),
+              ),
+              Container(
+                margin: EdgeInsets.all(20),
+                height:
+                MediaQuery.of(context).size.width * 0.5,
+                width:
+                MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                        image: NetworkImage(bir["image"]),
+                        fit: BoxFit.contain)),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '\t"name" :',
+                        style: TextStyle(
+                            color: const Color(0xffADC4CE),
+                            fontSize: 25)),
+                    TextSpan(
+                        text: '   ' + bir["label"],
+                        style: TextStyle(
+                            color: const Color(0xff75C2F6),
+                            fontSize: 25)),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '\t"location" :',
+                        style: TextStyle(
+                            color: const Color(0xffADC4CE),
+                            fontSize: 25)),
+                    TextSpan(
+                        text: '   unknown',
+                        style: TextStyle(
+                            color: const Color(0xff75C2F6),
+                            fontSize: 25)),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '\t"date" :',
+                        style: TextStyle(
+                            color: const Color(0xffADC4CE),
+                            fontSize: 25)),
+                    TextSpan(
+                        text: '   ' +
+                            DateTime.now()
+                                .toString()
+                                .substring(0, 11),
+                        style: TextStyle(
+                            color: const Color(0xff75C2F6),
+                            fontSize: 25)),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '\t"time" :',
+                        style: TextStyle(
+                            color: const Color(0xffADC4CE),
+                            fontSize: 25)),
+                    TextSpan(
+                        text: '   ' +
+                            DateTime.now()
+                                .toString()
+                                .substring(11, 19),
+                        style: TextStyle(
+                            color: const Color(0xff75C2F6),
+                            fontSize: 25)),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '\t"device" :',
+                        style: TextStyle(
+                            color: const Color(0xffADC4CE),
+                            fontSize: 25)),
+                    TextSpan(
+                        text: '   unknown',
+                        style: TextStyle(
+                            color: const Color(0xff75C2F6),
+                            fontSize: 25)),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: "\n}",
+                        style: TextStyle(
+                            color: const Color(0xffADC4CE),
+                            fontSize: 25)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  // Pop the current screen.
+                  Navigator.of(ctx).pop();
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color(0xff75C2F6),),
+                      child: const Text("close",
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                    SizedBox(width: 10,),
+                    Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color(0xff75C2F6),),
+                      padding: const EdgeInsets.all(14),
+                      child: const Text("follow",
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override

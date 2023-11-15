@@ -24,6 +24,11 @@ class _MyUploadState extends State<MyUpload> {
   List birdsList = [];
   String _label = "";
   dynamic _confidence;
+  late TextEditingController _nameController;
+  late TextEditingController _locationController;
+  late TextEditingController _dateController;
+  late TextEditingController _timeController;
+  late TextEditingController _deviceController;
 
   // Create a reference to the Firestore collection where you want to store the data.
   final CollectionReference birdsCollection = FirebaseFirestore.instance.collection('myBirds');
@@ -37,7 +42,15 @@ class _MyUploadState extends State<MyUpload> {
     super.initState();
     loadMyModel();
     _getLocation();
+    // Initialize controllers with default values or existing values.
+    _nameController = TextEditingController(text: 'unknown');
+    _locationController = TextEditingController(text: 'unknown');
+    _dateController = TextEditingController(text: 'unknown');
+    _timeController = TextEditingController(text: 'unknown');
+    _deviceController = TextEditingController(text: 'unknown');
   }
+
+
 
   // void _addBirdToFirestore() async {
   //   // Create a new document in the collection.
@@ -70,6 +83,8 @@ class _MyUploadState extends State<MyUpload> {
   //     });
   //   }
   // }
+
+
 
   Future<void> _addBirdToFirestore() async {
     // Create a new document in the collection.
@@ -275,8 +290,13 @@ class _MyUploadState extends State<MyUpload> {
                     elevation: 10.0,
                     primary: const Color(0xff2D4263),
                   ),
-                  onPressed: () {
-                    applyModelOnImage(uploadimage!);
+                  onPressed: () async {
+                    await applyModelOnImage(uploadimage!);
+                    setState(() {
+                      _nameController.text = _label;
+                      _locationController.text = _locationMessage;
+                      _nameController.text = _label;
+                    });
                   },
                   icon: Icon(Icons.search_rounded),
                   label: Text("discover"),
@@ -297,99 +317,20 @@ class _MyUploadState extends State<MyUpload> {
                               text: TextSpan(
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text: "{\n\n",
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
+                                    text: "{\n\n",
+                                    style: TextStyle(
+                                      color: const Color(0xffADC4CE),
+                                      fontSize: 25,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"name" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   ' + _label,
-                                      style: TextStyle(
-                                          color: const Color(0xff75C2F6),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"location" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: _locationMessage,
-                                      style: TextStyle(
-                                          color: const Color(0xff75C2F6),
-                                          fontSize: 15)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"date" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   ' +
-                                          DateTime.now()
-                                              .toString()
-                                              .substring(0, 11),
-                                      style: TextStyle(
-                                          color: const Color(0xff75C2F6),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"time" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   ' +
-                                          DateTime.now()
-                                              .toString()
-                                              .substring(11, 19),
-                                      style: TextStyle(
-                                          color: const Color(0xff75C2F6),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"device" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   unknown',
-                                      style: TextStyle(
-                                          color: const Color(0xff75C2F6),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
+                            _buildEditableField("name", _nameController),
+                            _buildEditableField("location", _locationController),
+                            _buildEditableField("date", _dateController),
+                            _buildEditableField("time", _timeController),
+                            _buildEditableField("device", _deviceController),
                             RichText(
                               text: TextSpan(
                                 children: <TextSpan>[
@@ -401,13 +342,6 @@ class _MyUploadState extends State<MyUpload> {
                                 ],
                               ),
                             ),
-
-                            // Text("{", style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"name" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"where" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"when" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"device" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text("}", style: TextStyle(color: Colors.amber, fontSize: 25),),
                           ],
                         ),
                       ),
@@ -428,86 +362,91 @@ class _MyUploadState extends State<MyUpload> {
                                 ],
                               ),
                             ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"name" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   unknown',
-                                      style: TextStyle(
-                                          color: const Color(0xff3A98B9),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"location" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: _locationMessage,
-                                      style: TextStyle(
-                                          color: const Color(0xff3A98B9),
-                                          fontSize: 20)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"date" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   unknown',
-                                      style: TextStyle(
-                                          color: const Color(0xff3A98B9),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"time" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   unknown',
-                                      style: TextStyle(
-                                          color: const Color(0xff3A98B9),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '\t   \t"device" :',
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                  TextSpan(
-                                      text: '   unknown',
-                                      style: TextStyle(
-                                          color: const Color(0xff3A98B9),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
+                            _buildEditableField("name", _nameController),
+                            _buildEditableField("location", _locationController),
+                            _buildEditableField("date", _dateController),
+                            _buildEditableField("time", _timeController),
+                            _buildEditableField("device", _deviceController),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: '\t   \t"name" :',
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //       TextSpan(
+                            //           text: '   unknown',
+                            //           style: TextStyle(
+                            //               color: const Color(0xff3A98B9),
+                            //               fontSize: 25)),
+                            //     ],
+                            //   ),
+                            // ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: '\t   \t"location" :',
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //       TextSpan(
+                            //           text: _locationMessage,
+                            //           style: TextStyle(
+                            //               color: const Color(0xff3A98B9),
+                            //               fontSize: 20)),
+                            //     ],
+                            //   ),
+                            // ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: '\t   \t"date" :',
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //       TextSpan(
+                            //           text: '   unknown',
+                            //           style: TextStyle(
+                            //               color: const Color(0xff3A98B9),
+                            //               fontSize: 25)),
+                            //     ],
+                            //   ),
+                            // ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: '\t   \t"time" :',
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //       TextSpan(
+                            //           text: '   unknown',
+                            //           style: TextStyle(
+                            //               color: const Color(0xff3A98B9),
+                            //               fontSize: 25)),
+                            //     ],
+                            //   ),
+                            // ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: '\t   \t"device" :',
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //       TextSpan(
+                            //           text: '   unknown',
+                            //           style: TextStyle(
+                            //               color: const Color(0xff3A98B9),
+                            //               fontSize: 25)),
+                            //     ],
+                            //   ),
+                            // ),
                             RichText(
                               text: TextSpan(
                                 children: <TextSpan>[
@@ -519,13 +458,6 @@ class _MyUploadState extends State<MyUpload> {
                                 ],
                               ),
                             ),
-
-                            // Text("{", style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"name" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"where" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"when" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text('\t"device" :', style: TextStyle(color: Colors.amber, fontSize: 25),),
-                            // Text("}", style: TextStyle(color: Colors.amber, fontSize: 25),),
                           ],
                         ),
                       ),
@@ -605,7 +537,7 @@ class _MyUploadState extends State<MyUpload> {
                                               color: const Color(0xffADC4CE),
                                               fontSize: 25)),
                                       TextSpan(
-                                          text: '   ' + _label,
+                                          text: '   ' + _nameController.text,
                                           style: TextStyle(
                                               color: const Color(0xff75C2F6),
                                               fontSize: 25)),
@@ -621,7 +553,7 @@ class _MyUploadState extends State<MyUpload> {
                                               color: const Color(0xffADC4CE),
                                               fontSize: 25)),
                                       TextSpan(
-                                          text: '   unknown',
+                                          text: '   '+_locationController.text,
                                           style: TextStyle(
                                               color: const Color(0xff75C2F6),
                                               fontSize: 25)),
@@ -700,9 +632,9 @@ class _MyUploadState extends State<MyUpload> {
                                 TextButton(
                                   onPressed: () {
                                     print({
-                                      "label": _label,
+                                      "label": _nameController.text,
                                       "image": uploadimage,
-                                      "location": "unknow",
+                                      "location": _locationController.text,
                                       "date": DateTime.now()
                                           .toString()
                                           .substring(0, 11),
@@ -712,9 +644,9 @@ class _MyUploadState extends State<MyUpload> {
                                       "device": "unknown"
                                     });
                                     birdsList.add({
-                                      "label": _label,
+                                      "label": _nameController.text,
                                       "image": uploadimage,
-                                      "location": "unknow",
+                                      "location": _locationController.text,
                                       "date": DateTime.now()
                                           .toString()
                                           .substring(0, 11),
@@ -732,7 +664,7 @@ class _MyUploadState extends State<MyUpload> {
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
-                                    color: const Color(0xff75C2F6),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color(0xff75C2F6),),
                                     padding: const EdgeInsets.all(14),
                                     child: const Text("confirm",
                                         style: TextStyle(color: Colors.black)),
@@ -750,12 +682,6 @@ class _MyUploadState extends State<MyUpload> {
                     //colorBrightness: Brightness.dark,
                   ),
                 ),
-                // Text("I am "+ _confidence.toString().substring(0,4) +"% sure, It's a ", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 20),) :
-                // // Text("Upload an Image to see result", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 20),),
-                // _bird != null ? Text(_label , style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 30),) : Text(""),
-                // SizedBox(height: MediaQuery.of(context).size.width*0.05,),
-                // _bird != null ? Text("Nice find 😻", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 20),) : Text(""),
-                // Spacer(),
                 Container(
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
@@ -767,8 +693,6 @@ class _MyUploadState extends State<MyUpload> {
                     },
                     icon: Icon(Icons.add_a_photo_rounded),
                     label: Text("Choose new image"),
-                    //color: Colors.deepOrangeAccent,
-                    //colorBrightness: Brightness.dark,
                   ),
                 ),
               ]),
@@ -857,14 +781,72 @@ class _MyUploadState extends State<MyUpload> {
             ),
           ),
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   backgroundColor: Colors.amber,
-        //   onPressed: (){
-        //     chooseImage();
-        //   },
-        //   child: Icon(Icons.add_a_photo_rounded),
-        // ),
       ),
     );
+  }
+
+  Widget _buildEditableField(String label, TextEditingController controller) {
+    return InkWell(
+      onTap: () {
+        _editField(label, controller);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          children: [
+            Text(
+              '\t   \t"$label" :',
+              style: TextStyle(
+                color: const Color(0xffADC4CE),
+                fontSize: 25,
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(
+              controller.text,
+              style: TextStyle(
+                color: const Color(0xff3A98B9),
+                fontSize: 25,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _editField(String label, TextEditingController controller) async {
+    final result = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit $label'),
+          content: TextField(
+            controller: controller,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, controller.text);
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        // Update the value when the user clicks Save in the dialog
+        controller.text = result;
+      });
+    }
   }
 }
