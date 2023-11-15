@@ -313,35 +313,35 @@ class _MyUploadState extends State<MyUpload> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: "{\n\n",
-                                    style: TextStyle(
-                                      color: const Color(0xffADC4CE),
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            _buildEditableField("name", _nameController),
-                            _buildEditableField("location", _locationController),
-                            _buildEditableField("date", _dateController),
-                            _buildEditableField("time", _timeController),
-                            _buildEditableField("device", _deviceController),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: "\n}",
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //         text: "{\n\n",
+                            //         style: TextStyle(
+                            //           color: const Color(0xffADC4CE),
+                            //           fontSize: 25,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            _buildEditableField("Name", _nameController),
+                            _buildEditableField("Location", _locationController),
+                            _buildEditableField("Date", _dateController),
+                            _buildEditableField("Time", _timeController),
+                            _buildEditableField("Device", _deviceController),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: "\n}",
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -351,22 +351,22 @@ class _MyUploadState extends State<MyUpload> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: "{\n\n",
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
-                            _buildEditableField("name", _nameController),
-                            _buildEditableField("location", _locationController),
-                            _buildEditableField("date", _dateController),
-                            _buildEditableField("time", _timeController),
-                            _buildEditableField("device", _deviceController),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: "{\n\n",
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //     ],
+                            //   ),
+                            // ),
+                            _buildEditableField("Name", _nameController),
+                            _buildEditableField("Location", _locationController),
+                            _buildEditableField("Date", _dateController),
+                            _buildEditableField("Time", _timeController),
+                            _buildEditableField("Device", _deviceController),
                             // RichText(
                             //   text: TextSpan(
                             //     children: <TextSpan>[
@@ -447,17 +447,17 @@ class _MyUploadState extends State<MyUpload> {
                             //     ],
                             //   ),
                             // ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: "\n}",
-                                      style: TextStyle(
-                                          color: const Color(0xffADC4CE),
-                                          fontSize: 25)),
-                                ],
-                              ),
-                            ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: "\n}",
+                            //           style: TextStyle(
+                            //               color: const Color(0xffADC4CE),
+                            //               fontSize: 25)),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -795,7 +795,7 @@ class _MyUploadState extends State<MyUpload> {
         child: Row(
           children: [
             Text(
-              '\t   \t"$label" :',
+              '\t   \t$label :',
               style: TextStyle(
                 color: const Color(0xffADC4CE),
                 fontSize: 25,

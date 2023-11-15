@@ -17,6 +17,7 @@ class PublicPage extends StatefulWidget {
 
 class _PublicPageState extends State<PublicPage> {
   List<dynamic> Bird = [];
+  List<dynamic> Favs = [];
 
   Set<String> favoriteBirds = Set<String>();
 
@@ -37,38 +38,124 @@ class _PublicPageState extends State<PublicPage> {
     final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
     // Check if the document exists.
     if (documentSnapshot.exists) {
-
-      // Get the user's birds array.
-      final List<dynamic> birdsArray = documentSnapshot['birds'];
-
       setState(() {
         Bird = documentSnapshot['birds'];
+        Favs = documentSnapshot['favs'];
       });
+      print(Bird);
+      print(Favs);
 
     }
   }
 
-  Future<void> _addBirdToFirestore(dynamic bird) async {
+
+  // Future<void> _addBirdToFirestore(dynamic bird) async {
+  //   // Create a new document in the collection.
+  //   final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
+  //   // Await the Future<DocumentSnapshot<Object?>> object.
+  //   final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+  //   // Check if the document exists.
+  //   if (documentSnapshot.exists) {
+  //     // Get the user's birds array.
+  //     final List<dynamic> birdsArray = documentSnapshot['favs'];
+  //
+  //     // Add the new bird to the array.
+  //     birdsArray.add(bird);
+  //
+  //     // Set the updated birds array on the document.
+  //     myBirdsDocument.update({'favs': birdsArray});
+  //   } else {
+  //     // The document does not exist, so create it.
+  //     myBirdsDocument.set({
+  //       'username': 'anandarul47@gmail.com',
+  //       'favs': [],
+  //     });
+  //   }
+  // }
+
+  Future<void> _addBirdToFavs(dynamic bird) async {
     // Create a new document in the collection.
-    final DocumentReference myBirdsDocument = birdsCollection.doc("anandarul47@gmail.com");
+    final DocumentReference myBirdsDocument = await birdsCollection.doc("anandarul47@gmail.com");
+
     // Await the Future<DocumentSnapshot<Object?>> object.
-    final DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+    DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+
     // Check if the document exists.
     if (documentSnapshot.exists) {
       // Get the user's birds array.
       final List<dynamic> birdsArray = documentSnapshot['favs'];
 
-      // Add the new bird to the array.
-      birdsArray.add(bird);
+      // Check if a bird with the same image already exists.
+      bool birdExists = birdsArray.any((existingBird) => existingBird['image'] == bird['image']);
 
-      // Set the updated birds array on the document.
-      myBirdsDocument.update({'favs': birdsArray});
+      if (!birdExists) {
+        // Add the new bird to the array.
+        birdsArray.add(bird);
+
+        // Set the updated birds array on the document.
+        await myBirdsDocument.update({'favs': birdsArray});
+        // Fetch the updated data after the update.
+        documentSnapshot = await myBirdsDocument.get();
+
+        // Update the local state with the updated data.
+        setState(() {
+          Bird = List.from(documentSnapshot['Bird']);
+          Favs = List.from(documentSnapshot['favs']);
+        });
+      } else {
+        // Handle the case where a bird with the same image already exists.
+        print('Bird with the same image already exists.');
+      }
     } else {
       // The document does not exist, so create it.
       myBirdsDocument.set({
         'username': 'anandarul47@gmail.com',
-        'favs': [],
+        'favs': [bird], // Initialize the array with the new bird.
       });
+    }
+  }
+
+  Future<void> _removeBirdFromFavs(dynamic bird) async {
+    try {
+      // Create a new document reference in the 'birds' collection.
+      final DocumentReference myBirdsDocument = await birdsCollection.doc("anandarul47@gmail.com");
+
+      // Await the Future<DocumentSnapshot<Object?>> object.
+      DocumentSnapshot<Object?> documentSnapshot = await myBirdsDocument.get();
+
+      // Check if the document exists.
+      if (documentSnapshot.exists) {
+        // Get the user's birds array.
+        final List<dynamic> birdsArray = await documentSnapshot['favs'];
+
+        // Find the index of the bird with the specified image.
+        int birdIndex = birdsArray.indexWhere((existingBird) => existingBird['image'] == bird['image']);
+
+        if (birdIndex != -1) {
+          // Remove the bird from the array.
+          birdsArray.removeAt(birdIndex);
+
+          // Set the updated birds array on the document.
+          await myBirdsDocument.update({'favs': birdsArray});
+          // Fetch the updated data after the update.
+          documentSnapshot = await myBirdsDocument.get();
+
+          // Update the local state with the updated data.
+          setState(() {
+            Bird = List.from(documentSnapshot['Bird']);
+            Favs = List.from(documentSnapshot['favs']);
+          });
+        } else {
+          // Handle the case where the bird to remove is not found in the array.
+          print('Bird not found in the favs array.');
+        }
+      } else {
+        // Handle the case where the document does not exist.
+        print('Document does not exist.');
+      }
+    } catch (e) {
+      // Handle any exceptions that may occur.
+      print('Error removing bird from favs: $e');
     }
   }
 
@@ -288,6 +375,8 @@ class _PublicPageState extends State<PublicPage> {
                 itemCount: Bird.length,
                 itemBuilder: (context, index) {
                   final bir = Bird[index];
+                  // bool isFavorite = Favs.contains(bir);
+                  bool isFavorite = Favs.any((fav) => fav["image"] == bir["image"]);
                   final cardColor =
                   index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
                   return Card(
@@ -304,12 +393,16 @@ class _PublicPageState extends State<PublicPage> {
                         trailing: IconButton(
                           icon: Icon(
                             Icons.favorite,
-                            color: Provider.of<FavoriteModel>(context).isFavorite(bir.toString()) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
+                            color: isFavorite ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
                           ),
                           onPressed: () {
-                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir.toString()) ? {
-                              Provider.of<FavoriteModel>(context, listen: false)
-                                  .removeFromFavorites(bir.toString()),
+                            Favs.any((fav) => fav["image"] == bir["image"]) ? {
+                              // Provider.of<FavoriteModel>(context, listen: false)
+                              //     .removeFromFavorites(bir.toString()),
+                              setState(() {
+                                _removeBirdFromFavs(bir);
+                                _readFromFirestore();
+                              }),
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -326,14 +419,18 @@ class _PublicPageState extends State<PublicPage> {
                                   })
                             }
 
-                                : {Provider.of<FavoriteModel>(
-                                context, listen: false)
-                                .addToFavorites(bir.toString()),
-                              _addBirdToFirestore(bir),
-                              if (!favoriteBirds.contains(bir.toString())) {
-                                Provider.of<FavoriteModel>(context, listen: false)
-                                    .addToFavorites(bir.toString())
-                              },
+                                : {
+                              // Provider.of<FavoriteModel>(
+                              //   context, listen: false)
+                              //   .addToFavorites(bir.toString()),
+                              setState(() {
+                                _addBirdToFavs(bir);
+                                _readFromFirestore();
+                              }),
+                              // if (!favoriteBirds.contains(bir.toString())) {
+                              //   Provider.of<FavoriteModel>(context, listen: false)
+                              //       .addToFavorites(bir.toString())
+                              // },
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {

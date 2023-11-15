@@ -261,7 +261,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: 10,),
           _isSelected ? Expanded(
-            child: ListView.builder(
+            child: Bird.length > 0 ? ListView.builder(
                 itemCount: Bird.length,
                 itemBuilder: (context, index){
                   final bir = Bird[index];
@@ -280,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         subtitle: Text(bir["location"]),
                       )
                   );
-                }),
+                }) : Text("You don't have any favourites", style: TextStyle(color: Colors.white, fontSize: 20),),
           ) : Container(),
           _isSelected2 ? Expanded(
             child: Followers.length > 0 ? ListView.builder(
