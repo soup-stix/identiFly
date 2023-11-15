@@ -131,12 +131,12 @@ class _PublicPageState extends State<PublicPage> {
                         trailing: IconButton(
                           icon: Icon(
                             Icons.favorite,
-                            color: Provider.of<FavoriteModel>(context).isFavorite(bir) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
+                            color: Provider.of<FavoriteModel>(context).isFavorite(bir.toString()) ? Colors.red : Colors.white,// Your favorite icon here// Change color according to your design
                           ),
                           onPressed: () {
-                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir) ? {
+                            Provider.of<FavoriteModel>(context, listen: false).isFavorite(bir.toString()) ? {
                               Provider.of<FavoriteModel>(context, listen: false)
-                                  .removeFromFavorites(bir),
+                                  .removeFromFavorites(bir.toString()),
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -155,11 +155,11 @@ class _PublicPageState extends State<PublicPage> {
 
                                 : {Provider.of<FavoriteModel>(
                                 context, listen: false)
-                                .addToFavorites(bir),
+                                .addToFavorites(bir.toString()),
                               _addBirdToFirestore(bir),
-                              if (!favoriteBirds.contains(bir)) {
+                              if (!favoriteBirds.contains(bir.toString())) {
                                 Provider.of<FavoriteModel>(context, listen: false)
-                                    .addToFavorites(bir)
+                                    .addToFavorites(bir.toString())
                               },
                               showDialog(
                                   context: context,
