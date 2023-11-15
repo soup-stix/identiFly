@@ -12,6 +12,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   File? _pickedImage;
+  bool _isSelected = true;
+  bool _isSelected2 = false;
+  bool _isSelected3 = false;
 
   Future<void> _pickImage() async {
     final pickedFile =
@@ -25,6 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   List<dynamic> Bird = [];
+  List<dynamic> Followers = [];
+  List<dynamic> Following = [];
 
   // Create a reference to the Firestore collection where you want to store the data.
   final CollectionReference birdsCollection = FirebaseFirestore.instance.collection('myBirds');
@@ -195,40 +200,166 @@ class _ProfilePageState extends State<ProfilePage> {
           //     },
           // ),
           // ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 1, // Just one item for the ExpansionTile
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  color: Colors.black,
-                  child: ExpansionTile(
-                    tilePadding: EdgeInsets.all(10.0),
-                    backgroundColor: Color(0xff2D4263),
-                    title: Text(
-                      'Favorites',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
+          SizedBox(height: 20,),
+          Container(
+            width: MediaQuery.of(context).size.width*0.8,
+            height: MediaQuery.of(context).size.width*0.12,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(32), color: Color(0xff2D4263)),
+            child: Row(
+              children: [
+                SizedBox(width: MediaQuery.of(context).size.width*0.02,),
+                ChoiceChip(label: Text("Favourites"),
+                    backgroundColor: Colors.grey.shade100,
+                    selectedColor: Colors.blueGrey,
+                    labelStyle: TextStyle(
+                      color: _isSelected ? Colors.white : Colors.black,
                     ),
-                    children: [
-                      // List your favorites here
-                      for (dynamic favorite in Bird)
-                        ListTile(
-                          leading: Image.network(favorite["image"]),
-                          title: Text(favorite["label"],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              )),
-                          subtitle: Text(favorite["location"]),
-                        ),
-                    ],
-                  ),
-                );
-              },
+                    selected: _isSelected,
+                    onSelected: (newboolValue){
+                      setState(() {
+                        _isSelected = newboolValue;
+                        _isSelected2 = false;
+                        _isSelected3 = false;
+                      });
+                    }
+                ),
+                Spacer(),
+                ChoiceChip(label: Text("Followers"),
+                    backgroundColor: Colors.grey.shade100,
+                    labelStyle: TextStyle(
+                      color: _isSelected2 ? Colors.white : Colors.black,
+                    ),
+                    selectedColor: Colors.blueGrey,
+                    selected: _isSelected2,
+                    onSelected: (newboolValue){
+                      setState(() {
+                        _isSelected2 = newboolValue;
+                        _isSelected = false;
+                        _isSelected3 = false;
+                      });
+                    }
+                ),
+                Spacer(),
+                ChoiceChip(label: Text("Following"),
+                    backgroundColor: Colors.grey.shade100,
+                    selectedColor: Colors.blueGrey,
+                    selected: _isSelected3,
+                    labelStyle: TextStyle(
+                      color: _isSelected3 ? Colors.white : Colors.black,
+                    ),
+                    onSelected: (newboolValue){
+                      setState(() {
+                        _isSelected3 = newboolValue;
+                        _isSelected = false;
+                        _isSelected2 = false;
+                      });
+                    }
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width*0.02,),
+              ],
             ),
           ),
+          SizedBox(height: 10,),
+          _isSelected ? Expanded(
+            child: ListView.builder(
+                itemCount: Bird.length,
+                itemBuilder: (context, index){
+                  final bir = Bird[index];
+                  print(bir);
+                  final cardColor = index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
+                  return Card(
+                      margin: EdgeInsets.all(9.0),
+                      elevation: 10.0,
+                      color: cardColor,
+                      child: ListTile(
+                        leading: SizedBox(width: 50, height: 50, child: Image.network(bir["image"])),
+                        title: Text(bir["label"],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )),
+                        subtitle: Text(bir["location"]),
+                      )
+                  );
+                }),
+          ) : Container(),
+          _isSelected2 ? Expanded(
+            child: Followers.length > 0 ? ListView.builder(
+                itemCount: Followers.length,
+                itemBuilder: (context, index){
+                  final bir = Followers[index];
+                  print(bir);
+                  final cardColor = index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
+                  return Card(
+                      margin: EdgeInsets.all(9.0),
+                      elevation: 10.0,
+                      color: cardColor,
+                      child: ListTile(
+                        leading: SizedBox(width: 50, height: 50, child: Image.network(bir["image"])),
+                        title: Text(bir["label"],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )),
+                        subtitle: Text(bir["location"]),
+                      )
+                  );
+                }) : Text("You have no followers", style: TextStyle(color: Colors.white, fontSize: 20),),
+          ) : Container(),
+          _isSelected3 ? Expanded(
+            child: Following.length > 0 ? ListView.builder(
+                itemCount: Following.length,
+                itemBuilder: (context, index){
+                  final bir = Following[index];
+                  print(bir);
+                  final cardColor = index % 2 == 0 ? Colors.blue[50] : Colors.blue[100];
+                  return Card(
+                      margin: EdgeInsets.all(9.0),
+                      elevation: 10.0,
+                      color: cardColor,
+                      child: ListTile(
+                        leading: SizedBox(width: 50, height: 50, child: Image.network(bir["image"])),
+                        title: Text(bir["label"],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )),
+                        subtitle: Text(bir["location"]),
+                      )
+                  );
+                }) : Text("You don't follow anyone", style: TextStyle(color: Colors.white, fontSize: 20),),
+          ) : Container(),
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: 1, // Just one item for the ExpansionTile
+          //     itemBuilder: (BuildContext context, int index) {
+          //       return Card(
+          //         color: Colors.black,
+          //         child: ExpansionTile(
+          //           tilePadding: EdgeInsets.all(10.0),
+          //           backgroundColor: Color(0xff2D4263),
+          //           title: Text(
+          //             'Favorites',
+          //             style: TextStyle(
+          //               fontSize: 20,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //           children: [
+          //             // List your favorites here
+          //             for (dynamic favorite in Bird)
+          //               ListTile(
+          //                 leading: SizedBox(width: 50, height: 50, child: Image.network(favorite["image"])),
+          //                 title: Text(favorite["label"],
+          //                     style: TextStyle(
+          //                       fontWeight: FontWeight.bold,
+          //                       color: Colors.white,
+          //                     )),
+          //                 subtitle: Text(favorite["location"]),
+          //               ),
+          //           ],
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );

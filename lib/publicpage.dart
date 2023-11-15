@@ -122,7 +122,7 @@ class _PublicPageState extends State<PublicPage> {
                     elevation: 10.0,
                     color: cardColor,
                     child: ListTile(
-                        leading: Image.network(bir["image"]),
+                        leading: SizedBox(width: 50, height: 50, child: Image.network(bir["image"])),
                         title: Text(bir['label'],
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
